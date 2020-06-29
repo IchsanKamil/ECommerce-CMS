@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../app.js');
 const { queryInterface } = require('../models').sequelize;
+const { User } = require('../models')
 const { encrypt } = require('../helpers/bcrypt.js');
 const { generateToken } = require('../helpers/jwt.js');
 
@@ -10,56 +11,19 @@ let user = {
     role: 'admin'
 }
 
-let token = generateToken({
-    id: 1,
-    email: user.email
-})
+let token;
 
 beforeAll((done) => {
-    queryInterface.bulkInsert('Users', [
-        {
-            id: 1,
-            email: user.email,
-            password: encrypt(user.password),
-            role: user.role,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        }
-    ])
-        // jwt sign
-        // product dari create
-        .then(() => {
-            return queryInterface.bulkInsert('Products', [
-                {
-                    id: 1,
-                    name: 'product name',
-                    image_url: 'http://your-image-url.com/img.png',
-                    price: 100000,
-                    stock: 100,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                },
-                {
-                    id: 2,
-                    name: 'product name 2',
-                    image_url: 'http://your-image-url-2.com/img.png',
-                    price: 200000,
-                    stock: 200,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                }
-            ])
+    User.create(user)
+        .then((user) => {
+            token = generateToken({ id: 1, email: user.email })
+            done();
         })
-        .then(() => {
-            done()
-        })
+        .catch((err) => done(err));
 })
 
 afterAll((done) => {
-    queryInterface.bulkDelete('Products')
-        .then(() => {
-            return queryInterface.bulkDelete('Users')
-        })
+    queryInterface.bulkDelete('Users')
         .then(() => {
             done()
         })

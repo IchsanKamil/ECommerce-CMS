@@ -3,9 +3,9 @@ const { Product } = require('../models');
 class ProductController {
     static create(req, res, next) {
         console.log('masuk Productcontrol');
-        const { title, description, category, due_date } = req.body;
+        const { name, image_url, price, stock } = req.body;
         const UserId = req.user.id
-        const newProduct = { title, description, category, due_date, UserId };
+        const newProduct = { name, image_url, price, stock, UserId };
         console.log(newProduct, '<< new Product');
         Product.create(newProduct)
             .then((data) => {
@@ -21,7 +21,7 @@ class ProductController {
         console.log('masuk findAll');
         Product.findAll({
             // where: { UserId: req.user.id },
-            order: [['due_date', 'ASC']]
+            order: [['stock', 'ASC']]
         })
             .then((data) => {
                 res.status(200).json(data);
@@ -43,8 +43,8 @@ class ProductController {
 
     static update(req, res, next) {
         const { id } = req.params;
-        const { title, description, category, due_date } = req.body;
-        const updateTodo = { title, description, category, due_date };
+        const { name, image_url, price, stock } = req.body;
+        const updateTodo = { name, image_url, price, stock };
         console.log(updateTodo, id, 'masuk update');
         Product.update(updateTodo, {
             where: { id }

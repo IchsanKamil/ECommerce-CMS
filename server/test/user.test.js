@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../app.js');
 const { queryInterface } = require('../models').sequelize;
+const { User, Product } = require('../models')
 const { encrypt } = require('../helpers/bcrypt.js')
 
 let user = {

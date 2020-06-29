@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles --forceExit"
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "keywords": [],
   "author": "Muh Ichsan Kamil",
@@ -20,6 +21,6 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.2.1",
-    "sequelize": "^6.1.0"
+    "sequelize": "^6.2.3"
   }
 }
