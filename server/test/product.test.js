@@ -7,7 +7,7 @@ const { generateToken } = require('../helpers/jwt.js');
 
 let user = {
     email: 'user@example.com',
-    password: '123456',
+    password: '1234567',
     role: 'admin'
 }
 
@@ -15,15 +15,18 @@ let token;
 
 beforeAll((done) => {
     User.create(user)
-        .then((user) => {
-            token = generateToken({ id: 1, email: user.email })
+        .then((data) => {
+            token = generateToken({ id: data.id, email: data.email })
             done();
         })
         .catch((err) => done(err));
 })
 
 afterAll((done) => {
-    queryInterface.bulkDelete('Users')
+    return queryInterface.bulkDelete('Products')
+        .then(() => {
+            return queryInterface.bulkDelete('Users')
+        })
         .then(() => {
             done()
         })
@@ -39,18 +42,19 @@ describe('Create new product', () => {
                 stock: 3,
             }
             request(app)
-                .post('/product')
-                .set('token', x)
+                .post('/products')
+                .set('token', token)
                 .send(newProduct)
                 .then((response) => {
                     // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(201)
-                    expect(body.data).toHaveProperty('id', expect.any(Number))
-                    expect(body.data).toHaveProperty('name', newProduct.name)
-                    expect(body.data).toHaveProperty('image_url', newProduct.image_url)
-                    expect(body.data).toHaveProperty('price', newProduct.price)
-                    expect(body.data).toHaveProperty('stock', newProduct.stock)
+                    expect(body).toHaveProperty('id', expect.any(Number))
+                    expect(body).toHaveProperty('name', newProduct.name)
+                    expect(body).toHaveProperty('image_url', newProduct.image_url)
+                    expect(body).toHaveProperty('price', newProduct.price)
+                    expect(body).toHaveProperty('stock', newProduct.stock)
+                    expect(body).toHaveProperty('UserId', expect.any(Number))
                     done()
                 })
         })
@@ -61,7 +65,7 @@ describe('Create new product', () => {
             it('Return status code 400 with err', (done) => {
                 let message = "Name can't be empty, Price can't be empty, Stock can't be empty"
                 request(app)
-                    .post('/product')
+                    .post('/products')
                     .set('token', token)
                     .then((response) => {
                         // console.log(response.body)
@@ -81,7 +85,7 @@ describe('Create new product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -102,7 +106,7 @@ describe('Create new product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -123,7 +127,7 @@ describe('Create new product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -144,7 +148,7 @@ describe('Create new product', () => {
                     stock: -4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -163,13 +167,13 @@ describe('Find all product', () => {
     describe('Success find all product', () => {
         it('Return status code 200 with data', (done) => {
             request(app)
-                .get(`/product`)
+                .get(`/products`)
                 .set('token', token)
                 .then((response) => {
                     // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body).toHaveProperty('data', expect.any(Array))
+                    expect(body).toHaveProperty(expect.any(Array))
                     done()
                 })
         })
@@ -180,7 +184,7 @@ describe('Find product by id', () => {
     describe('Success find product', () => {
         it('Return status code 200 with data', (done) => {
             request(app)
-                .get(`/product/1`)
+                .get(`/products/1`)
                 .set('token', token)
                 .then((response) => {
                     // console.log(response.body)
@@ -195,7 +199,7 @@ describe('Find product by id', () => {
         describe('product id is not in the database', () => {
             it('Return status code 404 with message', (done) => {
                 request(app)
-                    .get(`/product/77`)
+                    .get(`/products/77`)
                     .set('token', token)
                     .then((response) => {
                         // console.log(response.body)
@@ -219,18 +223,18 @@ describe('Update product', () => {
                 stock: 2,
             }
             request(app)
-                .put(`/product/1`)
+                .put(`/products/1`)
                 .set('token', token)
                 .send(updatedProduct)
                 .then((response) => {
                     // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body.data).toHaveProperty('id', 1)
-                    expect(body.data).toHaveProperty('name', newProduct.name)
-                    expect(body.data).toHaveProperty('image_url', newProduct.image_url)
-                    expect(body.data).toHaveProperty('price', newProduct.price)
-                    expect(body.data).toHaveProperty('stock', newProduct.stock)
+                    expect(body).toHaveProperty('id', 1)
+                    expect(body).toHaveProperty('name', newProduct.name)
+                    expect(body).toHaveProperty('image_url', newProduct.image_url)
+                    expect(body).toHaveProperty('price', newProduct.price)
+                    expect(body).toHaveProperty('stock', newProduct.stock)
                     done()
                 })
         })
@@ -240,7 +244,7 @@ describe('Update product', () => {
             it('Return status code 400 with message', (done) => {
                 let message = "Name can't be empty, Price can't be empty, Stock can't be empty"
                 request(app)
-                    .post('/product')
+                    .post('/products')
                     .set('token', token)
                     .then((response) => {
                         // console.log(response.body)
@@ -260,7 +264,7 @@ describe('Update product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -281,7 +285,7 @@ describe('Update product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -302,7 +306,7 @@ describe('Update product', () => {
                     stock: 4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -323,7 +327,7 @@ describe('Update product', () => {
                     stock: -4,
                 }
                 request(app)
-                    .post('/product/')
+                    .post('/products')
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -344,7 +348,7 @@ describe('Update product', () => {
                     stock: -4,
                 }
                 request(app)
-                    .get(`/product/77`)
+                    .get(`/products/777`)
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
@@ -363,13 +367,13 @@ describe('Delete product', () => {
     describe('Success delete product', () => {
         it('Return status code 200 with message', (done) => {
             request(app)
-                .delete(`/product/1`)
+                .delete(`/products/1`)
                 .set('token', token)
                 .then((response) => {
                     // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body).toHaveProperty('message', "product successfully deleted")
+                    expect(body).toHaveProperty('message', "Product successfully deleted")
                     done()
                 })
         })

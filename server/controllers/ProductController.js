@@ -9,7 +9,7 @@ class ProductController {
         console.log(newProduct, '<< new Product');
         Product.create(newProduct)
             .then((data) => {
-                console.log('crete Product');
+                console.log(data, '<<<< crete Product');
                 res.status(201).json(data);
             }).catch((err) => {
                 console.log('failed create');
@@ -70,7 +70,6 @@ class ProductController {
                 console.log('delete then con');
                 res.status(200).json({
                     message: `Product successfully deleted`,
-                    deleteTodo
                 })
             })
             .catch((err) => {

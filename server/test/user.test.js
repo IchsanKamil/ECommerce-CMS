@@ -6,20 +6,12 @@ const { encrypt } = require('../helpers/bcrypt.js')
 
 let user = {
     email: 'user@example.com',
-    password: '123456',
+    password: '1234567',
     role: 'admin'
 }
 // create
 beforeAll((done) => {
-    queryInterface.bulkInsert('Users', [
-        {
-            email: user.email,
-            password: encrypt(user.password),
-            role: user.role,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        }
-    ])
+    User.create(user)
         .then(() => {
             done()
         })
@@ -68,7 +60,7 @@ describe('Login user', () => {
                         // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(404)
-                        expect(body).toHaveProperty('message', "Invalid email/password")
+                        expect(body).toHaveProperty('message', "Email/Password not match")
                         done()
                     })
             })
@@ -86,7 +78,7 @@ describe('Login user', () => {
                         // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
-                        expect(body).toHaveProperty('message', "Invalid email/password")
+                        expect(body).toHaveProperty('message', "Email/Password not match")
                         done()
                     })
             })

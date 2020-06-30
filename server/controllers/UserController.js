@@ -17,7 +17,7 @@ class UserController {
                         }
                         const token = generateToken(payload);
 
-                        res.status(201).json({
+                        res.status(200).json({
                             id: data.id,
                             email,
                             token

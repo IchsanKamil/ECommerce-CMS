@@ -46,13 +46,13 @@ _Response (200 - Ok)_
 _Response (400 - Bad Request)_
 ```json
 {
-    "message": "Invalid email/password"
+    "message": "Email/Password not match"
 }
 ```
 _Response (404 - Not Found)_
 ```json
 {
-    "message": "Invalid email/password"
+    "message": "Email/Password not match"
 }
 ```
 ---
@@ -82,6 +82,7 @@ _Response (201 - Created)_
     "image_url": "http://your-image-url.com/img.png",
     "price": 100000,
     "stock": 100,
+    "UserId": 1,
     "updatedAt": "2020-06-17T16:38:51.584Z",
     "createdAt": "2020-06-17T16:38:51.584Z"
 }
