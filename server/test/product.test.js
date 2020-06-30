@@ -48,7 +48,6 @@ describe('Create new product', () => {
                 .set('token', token)
                 .send(newProduct)
                 .then((response) => {
-                    // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(201)
                     expect(body).toHaveProperty('id', expect.any(Number))
@@ -78,7 +77,6 @@ describe('Create new product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', message)
@@ -99,7 +97,6 @@ describe('Create new product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', 'Name min 3 characters')
@@ -120,7 +117,6 @@ describe('Create new product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', 'Invalid url format')
@@ -141,7 +137,6 @@ describe('Create new product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', "Price can't be below zero")
@@ -162,7 +157,6 @@ describe('Create new product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', "Stock can't be below zero")
@@ -180,10 +174,9 @@ describe('Find all product', () => {
                 .get(`/products`)
                 .set('token', token)
                 .then((response) => {
-                    console.log(response.body, '<<<<<<<<<<<');
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body).toHaveProperty(expect.any(Array))
+                    expect(body).toEqual(expect.any(Array))
                     done()
                 })
         })
@@ -197,7 +190,6 @@ describe('Find product by id', () => {
                 .get(`/products/${id}`)
                 .set('token', token)
                 .then((response) => {
-                    console.log(response.body, 'find product')
                     const { body, status } = response
                     expect(status).toBe(200)
                     expect(body).toHaveProperty('id', expect.any(Number))
@@ -217,7 +209,6 @@ describe('Find product by id', () => {
                     .get(`/products/77`)
                     .set('token', token)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(404)
                         expect(body).toHaveProperty('message', "Product not found")
@@ -242,7 +233,6 @@ describe('Update product', () => {
                 .set('token', token)
                 .send(updatedProduct)
                 .then((response) => {
-                    // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
                     expect(body).toHaveProperty('name', updatedProduct.name)
@@ -267,7 +257,6 @@ describe('Update product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', 'Name min 3 characters')
@@ -288,7 +277,6 @@ describe('Update product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', 'Invalid url format')
@@ -309,7 +297,6 @@ describe('Update product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', "Price can't be below zero")
@@ -330,7 +317,6 @@ describe('Update product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', "Stock can't be below zero")
@@ -351,7 +337,6 @@ describe('Update product', () => {
                     .set('token', token)
                     .send(newProduct)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(404)
                         expect(body).toHaveProperty('message', "Product not found")
@@ -369,7 +354,6 @@ describe('Delete product', () => {
                 .delete(`/products/1`)
                 .set('token', token)
                 .then((response) => {
-                    // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
                     expect(body).toHaveProperty('message', "Product successfully deleted")

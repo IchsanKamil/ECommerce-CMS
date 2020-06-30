@@ -35,7 +35,6 @@ describe('Login user', () => {
                 .post('/login')
                 .send(loginUser)
                 .then((response) => {
-                    // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
                     expect(body).toHaveProperty('id', expect.any(Number))
@@ -57,7 +56,6 @@ describe('Login user', () => {
                     .post('/login')
                     .send(loginUser)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(404)
                         expect(body).toHaveProperty('message', "Email/Password not match")
@@ -75,7 +73,6 @@ describe('Login user', () => {
                     .post('/login')
                     .send(loginUser)
                     .then((response) => {
-                        // console.log(response.body)
                         const { body, status } = response
                         expect(status).toBe(400)
                         expect(body).toHaveProperty('message', "Email/Password not match")

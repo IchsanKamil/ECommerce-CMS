@@ -54,7 +54,5 @@ module.exports = (err, req, res, next) => {
             break;
     }
 
-    // if (err.code) res.status(err.code).json(err.message)
-    // else 
     res.status(code).json({ message })
 }
