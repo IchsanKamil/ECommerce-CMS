@@ -10,7 +10,7 @@ module.exports = (err, req, res, next) => {
             });
 
             code = 400
-            message = errors
+            message = `${errors}`
             break;
 
         case 'EMAIL/PASSWORD_NOT_MATCH':

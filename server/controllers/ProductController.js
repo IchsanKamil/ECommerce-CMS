@@ -6,13 +6,13 @@ class ProductController {
         const { name, image_url, price, stock } = req.body;
         const UserId = req.user.id
         const newProduct = { name, image_url, price, stock, UserId };
-        console.log(newProduct, '<< new Product');
+        // console.log(newProduct, '<< new Product');
         Product.create(newProduct)
             .then((data) => {
-                console.log(data, '<<<< crete Product');
+                // console.log(data, '<<<< crete Product');
                 res.status(201).json(data);
             }).catch((err) => {
-                console.log('failed create');
+                // console.log('failed create');
                 next(err);
             });
     }
@@ -35,7 +35,11 @@ class ProductController {
 
         Product.findByPk(id)
             .then((data) => {
-                res.status(200).json(data)
+                if (!data) {
+                    throw({ name: `PRODUCT_NOT_FOUND`, })
+                } else {
+                    res.status(200).json(data)
+                }
             }).catch((err) => {
                 next(err)
             });
@@ -45,18 +49,23 @@ class ProductController {
         const { id } = req.params;
         const { name, image_url, price, stock } = req.body;
         const updateTodo = { name, image_url, price, stock };
-        console.log(updateTodo, id, 'masuk update');
-        Product.update(updateTodo, {
-            where: { id }
-        })
+        
+        Product.findByPk(id)
+            .then((result) => {
+                if (!result) {
+                    throw({ name: `PRODUCT_NOT_FOUND`, })
+                } else {
+                    return Product.update(updateTodo, {
+                        where: { id }
+                    })
+                }
+            })
             .then(() => {
-                console.log('then update con');
                 res.status(200).json(updateTodo);
             })
             .catch((err) => {
-                console.log('catch update con');
                 next(err);
-            });
+            });        
     }
 
     static destroy(req, res, next) {

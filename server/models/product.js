@@ -19,16 +19,31 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          message: `Name can't be empty`
+          msg: `Name can't be empty`
+        },
+        len: {
+          args: [3],
+          msg: `Name min 3 characters`
         }
       }
     },
-    image_url: DataTypes.STRING,
+    image_url: {
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: {
+          msg: `Invalid url format`
+        }
+      }
+    },
     price: {
       type: DataTypes.INTEGER,
       validate: {
         notEmpty: {
-          message: `Price can't be empty`
+          msg: `Price can't be empty`
+        },
+        min: {
+          args: -1,
+          msg: `Price can't be below zero`
         }
       }
     },
@@ -36,7 +51,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       validate: {
         notEmpty: {
-          message: `Stock can't be empty`
+          msg: `Stock can't be empty`
+        },
+        min: {
+          args: -1,
+          msg: `Stock can't be below zero`
         }
       }
     },

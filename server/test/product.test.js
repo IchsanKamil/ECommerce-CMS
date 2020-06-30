@@ -12,11 +12,13 @@ let user = {
 }
 
 let token;
+let id;
 
 beforeAll((done) => {
     User.create(user)
         .then((data) => {
-            token = generateToken({ id: data.id, email: data.email })
+            const { id, email } = data
+            token = generateToken({ id, email })
             done();
         })
         .catch((err) => done(err));
@@ -55,6 +57,7 @@ describe('Create new product', () => {
                     expect(body).toHaveProperty('price', newProduct.price)
                     expect(body).toHaveProperty('stock', newProduct.stock)
                     expect(body).toHaveProperty('UserId', expect.any(Number))
+                    id = body.id
                     done()
                 })
         })
@@ -63,10 +66,17 @@ describe('Create new product', () => {
     describe('Failed to create new product', () => {
         describe('attributes are empty', () => {
             it('Return status code 400 with err', (done) => {
-                let message = "Name can't be empty, Price can't be empty, Stock can't be empty"
+                let message = "Name can't be empty,Name min 3 characters,Invalid url format,Price can't be empty,Stock can't be empty"
+                let newProduct = {
+                    name: '',
+                    image_url: '',
+                    price: '',
+                    stock: '',
+                }
                 request(app)
                     .post('/products')
                     .set('token', token)
+                    .send(newProduct)
                     .then((response) => {
                         // console.log(response.body)
                         const { body, status } = response
@@ -162,7 +172,7 @@ describe('Create new product', () => {
         })
     })
 })
-
+// FAILED <<<<<<<<<<
 describe('Find all product', () => {
     describe('Success find all product', () => {
         it('Return status code 200 with data', (done) => {
@@ -170,7 +180,7 @@ describe('Find all product', () => {
                 .get(`/products`)
                 .set('token', token)
                 .then((response) => {
-                    // console.log(response.body)
+                    console.log(response.body, '<<<<<<<<<<<');
                     const { body, status } = response
                     expect(status).toBe(200)
                     expect(body).toHaveProperty(expect.any(Array))
@@ -184,13 +194,18 @@ describe('Find product by id', () => {
     describe('Success find product', () => {
         it('Return status code 200 with data', (done) => {
             request(app)
-                .get(`/products/1`)
+                .get(`/products/${id}`)
                 .set('token', token)
                 .then((response) => {
-                    // console.log(response.body)
+                    console.log(response.body, 'find product')
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body).toHaveProperty('data', expect.any(Object))
+                    expect(body).toHaveProperty('id', expect.any(Number))
+                    expect(body).toHaveProperty('name', expect.any(String))
+                    expect(body).toHaveProperty('image_url', expect.any(String))
+                    expect(body).toHaveProperty('price', expect.any(Number))
+                    expect(body).toHaveProperty('stock', expect.any(Number))
+                    expect(body).toHaveProperty('UserId', expect.any(Number))
                     done()
                 })
         })
@@ -223,40 +238,24 @@ describe('Update product', () => {
                 stock: 2,
             }
             request(app)
-                .put(`/products/1`)
+                .put(`/products/${id}`)
                 .set('token', token)
                 .send(updatedProduct)
                 .then((response) => {
                     // console.log(response.body)
                     const { body, status } = response
                     expect(status).toBe(200)
-                    expect(body).toHaveProperty('id', 1)
-                    expect(body).toHaveProperty('name', newProduct.name)
-                    expect(body).toHaveProperty('image_url', newProduct.image_url)
-                    expect(body).toHaveProperty('price', newProduct.price)
-                    expect(body).toHaveProperty('stock', newProduct.stock)
+                    expect(body).toHaveProperty('name', updatedProduct.name)
+                    expect(body).toHaveProperty('image_url', updatedProduct.image_url)
+                    expect(body).toHaveProperty('price', updatedProduct.price)
+                    expect(body).toHaveProperty('stock', updatedProduct.stock)
                     done()
                 })
         })
     })
     describe('fail update product', () => {
-        describe('attributes are empty', () => {
-            it('Return status code 400 with message', (done) => {
-                let message = "Name can't be empty, Price can't be empty, Stock can't be empty"
-                request(app)
-                    .post('/products')
-                    .set('token', token)
-                    .then((response) => {
-                        // console.log(response.body)
-                        const { body, status } = response
-                        expect(status).toBe(400)
-                        expect(body).toHaveProperty('message', message)
-                        done()
-                    })
-            })
-        })
         describe('attribute name has less than 3 characters', () => {
-            it('Return status code 400 with message', (done) => {
+            it('Return status code 400 with err', (done) => {
                 let newProduct = {
                     name: 'As',
                     image_url: 'http://your-image-url-2.com/img.png',
@@ -277,7 +276,7 @@ describe('Update product', () => {
             })
         })
         describe('attribute image_url has invalid url format', () => {
-            it('Return status code 400 with message', (done) => {
+            it('Return status code 400 with err', (done) => {
                 let newProduct = {
                     name: 'Asus',
                     image_url: 'http/your-image-url-2/img.png',
@@ -298,7 +297,7 @@ describe('Update product', () => {
             })
         })
         describe('attribute price has value below zero', () => {
-            it('Return status code 400 with message', (done) => {
+            it('Return status code 400 with err', (done) => {
                 let newProduct = {
                     name: 'Asus',
                     image_url: 'http://your-image-url-2.com/img.png',
@@ -319,7 +318,7 @@ describe('Update product', () => {
             })
         })
         describe('attribute stock has value below zero', () => {
-            it('Return status code 400 with message', (done) => {
+            it('Return status code 400 with err', (done) => {
                 let newProduct = {
                     name: 'Asus',
                     image_url: 'http://your-image-url-2.com/img.png',

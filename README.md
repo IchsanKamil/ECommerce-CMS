@@ -90,7 +90,7 @@ _Response (201 - Created)_
 _Response (400 - Bad Request)_
 ```json
 {
-    "message": "Name can't be empty, Name min 3 characters, Invalid url format, Price can't be empty, Price can't be below zero, Stock can't be empty, Stock can't be below zero"
+    "message": "Name can't be empty,Name min 3 characters,Invalid url format,Price can't be empty,Stock can't be empty"
 }
 ```
 ---
@@ -112,6 +112,7 @@ _Response (200 - Ok)_
         "image_url": "http://your-image-url.com/img.png",
         "price": 100000,
         "stock": 100,
+        "UserId": 1,
         "updatedAt": "2020-06-17T16:38:51.584Z",
         "createdAt": "2020-06-17T16:38:51.584Z"
     }, {
@@ -137,6 +138,7 @@ _Response (200 - Ok)_
     "image_url": "http://your-image-url.com/img.png",
     "price": 100000,
     "stock": 100,
+    "UserId": 1,
     "updatedAt": "2020-06-17T16:38:51.584Z",
     "createdAt": "2020-06-17T16:38:51.584Z"
 }
