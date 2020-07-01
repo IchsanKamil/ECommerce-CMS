@@ -58,7 +58,7 @@ describe('Login user', () => {
                     .then((response) => {
                         const { body, status } = response
                         expect(status).toBe(404)
-                        expect(body).toHaveProperty('message', "Email/Password not match")
+                        expect(body).toHaveProperty('message', "Username not found")
                         done()
                     })
             })
@@ -75,7 +75,7 @@ describe('Login user', () => {
                     .then((response) => {
                         const { body, status } = response
                         expect(status).toBe(400)
-                        expect(body).toHaveProperty('message', "Email/Password not match")
+                        expect(body).toHaveProperty('message', "Username/Password not match")
                         done()
                     })
             })

@@ -20,7 +20,7 @@ module.exports = (err, req, res, next) => {
 
         case 'EMAIL_NOT_FOUND':
             code = 404
-            message = `Email/Password not match`
+            message = `Email not found`
             break;
 
         case 'SequelizeUniqueConstraintError':
