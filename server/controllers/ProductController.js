@@ -45,23 +45,25 @@ class ProductController {
             });
     }
 
-    static update(req, res, next) {
+    static update(req, res, next) {  
         const { id } = req.params;
         const { name, image_url, price, stock } = req.body;
-        const updateTodo = { name, image_url, price, stock };
-        
+        const updateProduct = { name, image_url, price, stock };
+        console.log('update');
         Product.findByPk(id)
             .then((result) => {
                 if (!result) {
                     throw({ name: `PRODUCT_NOT_FOUND`, })
                 } else {
-                    return Product.update(updateTodo, {
+                    console.log(updateProduct);
+                    return Product.update(updateProduct, {
                         where: { id }
                     })
                 }
-            })
+            })    
             .then(() => {
-                res.status(200).json(updateTodo);
+                console.log('update control');
+                res.status(200).json(updateProduct);
             })
             .catch((err) => {
                 next(err);

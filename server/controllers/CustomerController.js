@@ -59,6 +59,9 @@ class CustomerController {
       .then((result) => {
         if (result.length !== 0) {
           result[0].dataValues.quantity += +quantity
+	  if (result[0].dataValues.quantity > result[0].dataValues.Product.stock) {
+            result[0].dataValues.quantity = result[0].dataValues.Product.stock
+          }
           res.send(result)
           return Cart.update(result[0].dataValues, {
             where: { CustomerId, ProductId }
@@ -96,20 +99,24 @@ class CustomerController {
     const { CustomerId, ProductId } = req.params;
     const { quantity } = req.body;
     const updateCart = { quantity, CustomerId, ProductId }
-
+    console.log(updateCart, 'update Controller');
     Cart.findAll({
       where: { CustomerId, ProductId }
     })
       .then((result) => {
+        console.log('masuk then');
         if (!result) {
+          console.log('customer not found');
           throw ({ name: `CUSTOMER_NOT_FOUND`, })
         } else {
+          console.log('update control');
           return Cart.update(updateCart, {
             where: { CustomerId, ProductId }
           })
         }
       })
       .then(() => {
+        console.log('then update controler');
         res.status(200).json({message: 'Successfully Updated'});
       })
       .catch((err) => {
