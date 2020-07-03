@@ -1,7 +1,7 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top" id="navbar-custom">
-      <a class="navbar-brand mr-auto" href="#" onclick="auth()">Admin</a>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top " id="navbar-custom">
+      <a class="navbar-brand mr-auto" href="#" onclick="">Admin</a>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a

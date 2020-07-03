@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-center mt-5">
+  <div class="overflow-hidden row justify-content-center mt-5 text-center">
     <div class="col-4">
       <form class="form-signin" @submit.prevent="login">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
